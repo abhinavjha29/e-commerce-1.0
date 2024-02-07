@@ -1,0 +1,9 @@
+/* .single_card {
+  /* width: 80%;
+  height: 95px; */
+.quant_input {
+  width: 30px;
+}
+.price_container {
+  width: fit-content;
+}

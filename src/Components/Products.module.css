@@ -1,0 +1,47 @@
+/* ProductsPage.module.css */
+
+/* Container styles */
+.productsContainer {
+  padding-top: 20px;
+}
+
+/* Section title styles */
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Category list styles */
+.categoryList {
+  font-size: 1.2rem;
+}
+
+.categoryItem {
+  cursor: pointer;
+}
+
+/* Sort select styles */
+.sortSelect {
+  width: 100%;
+}
+
+/* Product card styles */
+.productCard {
+  transition: transform 0.3s ease;
+}
+
+.productCard:hover {
+  transform: translateY(-5px);
+}
+
+/* View details button styles */
+/* .viewDetailsBtn {
+  width: 100%;
+} */
+
+.pageTitle {
+  color: darkslategrey;
+}
+.addToCart_btn {
+  float: right;
+}
