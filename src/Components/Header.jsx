@@ -78,9 +78,12 @@ const Header = ({ setSelectedTab }) => {
             <button type="button" className="btn btn-outline-light me-2">
               Login
             </button>
-            <button type="button" className="btn btn-warning">
-              Sign-up
-            </button>
+
+            <NavLink to="/signup">
+              <button type="button" className="btn btn-warning">
+                Sign-up
+              </button>
+            </NavLink>
             <button
               type="button"
               className="btn btn-info position-relative m-2"

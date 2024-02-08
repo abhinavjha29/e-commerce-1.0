@@ -13,24 +13,31 @@ import AppProvider from "./Store/AppProvider";
 import ProductProvider from "./Store/ProductProvider";
 import { useState } from "react";
 import Cart from "./Components/overlay/Cart";
+import RegistrationPage from "./pages/RegistrationPage";
+import UserDetailProvider from "./Store/UserDetailProvider";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState("home");
   return (
     <AppProvider>
       <ProductProvider>
-        <BrowserRouter>
-          <Header setSelectedTab={setSelectedTab}></Header>
-          {selectedTab === "cart" && <Cart setSelectedTab={setSelectedTab} />}
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/product" element={<Products />} />
-            <Route path="/product/:id" element={<SingleProduct />} />
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
-        </BrowserRouter>
+        <UserDetailProvider>
+          <BrowserRouter>
+            <Header setSelectedTab={setSelectedTab}></Header>
+            {selectedTab === "cart" && <Cart setSelectedTab={setSelectedTab} />}
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/product" element={<Products />} />
+              <Route path="/product/:id" element={<SingleProduct />} />
+
+              <Route path="/signup" element={<RegistrationPage />} />
+
+              <Route path="*" element={<ErrorPage />} />
+            </Routes>
+          </BrowserRouter>
+        </UserDetailProvider>
       </ProductProvider>
     </AppProvider>
   );
