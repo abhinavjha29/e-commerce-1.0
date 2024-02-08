@@ -19,6 +19,14 @@ const UserDetailReducer = (state, action) => {
       isError: true,
     };
   }
+  if (action.type === "LOGIN_CONFIRM") {
+    return {
+      ...state,
+      isLoading: false,
+      data: action.payload,
+      token: action.payload.token,
+    };
+  }
   return { ...state };
 };
 

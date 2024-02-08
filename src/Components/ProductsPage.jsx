@@ -1,17 +1,37 @@
 import React, { useContext, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  redirect,
+  unstable_HistoryRouter,
+} from "react-router-dom";
+
 import styles from "./Products.module.css";
 import AppContext from "../Store/AppContext";
 import FormatPrice from "../Helper/FormatPrice";
 import { LiaTruckLoadingSolid } from "react-icons/lia";
 import Review from "./Review";
 import ProductContext from "../Store/ProductContext";
+import UserContext from "../Store/UserDetailContext";
 
 const ProductsPage = () => {
   const { byPrice, byRating, products, isLoading, getProducts } =
     useContext(AppContext);
+  const { isLogged } = useContext(UserContext);
   const { addItem } = useContext(ProductContext);
+
   //console.log(ProductContext);
+  // const checkLoggin = () => {
+  //   if (isLogged === false) {
+  //     return redirect("/login");
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   console.log("in useeffect");
+  //   console.log(isLogged);
+  //   checkLoggin();
+  // }, []);
 
   useEffect(() => {
     getProducts("https://fakestoreapi.com/products");

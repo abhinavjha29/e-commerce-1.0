@@ -1,21 +1,26 @@
-import React, { useContext, useRef } from "react";
-
+import React, { useContext, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import UserContext from "../Store/UserDetailContext";
 
 const LoginForm = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
-
-  const { checkLoginDetail } = useContext(UserContext);
-
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const { checkLoginDetail, data, isLogged } = useContext(UserContext);
+  useEffect(() => {
+    console.log(isLogged);
+    if (isLogged) {
+      navigate("/product");
+    }
+  }, [isLogged, navigate]);
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
       username: usernameRef.current.value,
       password: passwordRef.current.value,
     };
-    checkLoginDetail(formData);
-    console.log(formData);
+    await checkLoginDetail(formData);
+    console.log(data, "data ios");
   };
 
   return (

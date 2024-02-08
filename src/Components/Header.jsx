@@ -1,23 +1,27 @@
-import React, { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import style from "./Header.module.css";
 import { NavLink } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import ProductContext from "../Store/ProductContext";
+import UserContext from "../Store/UserDetailContext";
+import LoginBtn from "./loginBtn";
+import { useNavigate } from "react-router-dom";
 const Header = ({ setSelectedTab }) => {
-  // return (
-  // <div className={style.header}>
-  //   <NavLink to="/">
-  //
-  //   </NavLink>
-  // </div>
-
-  // let totalQuantity = 0;
-  // if (product.length > 0) {
-  //   product.forEach((item) => {
-  //     console.log(item, "item is");
-  //     totalQuantity = totalQuantity + item.quantity;
-  //   });
-  // }
+  const { data, isLogged, setIsLogged } = useContext(UserContext);
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  console.log(data, "data at head");
+  const onLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    setIsLogged(false);
+  };
+  useEffect(() => {
+    console.log(isLogged);
+    if (!isLogged) {
+      navigate("/");
+    }
+  }, [isLogged]);
   const { items } = useContext(ProductContext);
   let totalQuantity = 0;
   if (items.length > 0) {
@@ -45,7 +49,10 @@ const Header = ({ setSelectedTab }) => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/product" className="nav-link px-2 text-white">
+              <NavLink
+                to={isLogged ? "/product" : "/login"}
+                className="nav-link px-2 text-white"
+              >
                 Products
               </NavLink>
             </li>
@@ -75,17 +82,12 @@ const Header = ({ setSelectedTab }) => {
           </form>
 
           <div className="text-end">
-            <NavLink to="/login">
-              <button type="button" className="btn btn-outline-light me-2">
-                Login
+            {isLogged === false && <LoginBtn />}
+            {isLogged === true && (
+              <button className="btn btn-danger" onClick={(e) => onLogout(e)}>
+                Logout
               </button>
-            </NavLink>
-
-            <NavLink to="/signup">
-              <button type="button" className="btn btn-warning">
-                Sign-up
-              </button>
-            </NavLink>
+            )}
             <button
               type="button"
               className="btn btn-info position-relative m-2"
