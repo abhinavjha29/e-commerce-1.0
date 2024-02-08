@@ -15,6 +15,7 @@ import { useState } from "react";
 import Cart from "./Components/overlay/Cart";
 import RegistrationPage from "./pages/RegistrationPage";
 import UserDetailProvider from "./Store/UserDetailProvider";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState("home");
@@ -31,7 +32,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/product" element={<Products />} />
               <Route path="/product/:id" element={<SingleProduct />} />
-
+              <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<RegistrationPage />} />
 
               <Route path="*" element={<ErrorPage />} />

@@ -75,9 +75,11 @@ const Header = ({ setSelectedTab }) => {
           </form>
 
           <div className="text-end">
-            <button type="button" className="btn btn-outline-light me-2">
-              Login
-            </button>
+            <NavLink to="/login">
+              <button type="button" className="btn btn-outline-light me-2">
+                Login
+              </button>
+            </NavLink>
 
             <NavLink to="/signup">
               <button type="button" className="btn btn-warning">
