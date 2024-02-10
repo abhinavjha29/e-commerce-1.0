@@ -1,44 +1,100 @@
 import { useEffect, useState } from "react";
 import ProductContext from "./ProductContext";
+import axios from "axios";
 
 const ProductProvider = (props) => {
-  const [product, setProduct] = useState([]);
+  const token = localStorage.getItem("token");
+  let [product, setProduct] = useState([]);
   let [quantity, setQuantity] = useState(0);
-  const addItemtoCart = (item) => {
-    console.log(item);
-    let isAvail = false;
-    let updatedProduct = [...product];
-    updatedProduct.forEach((items) => {
-      if (items.title === item.title) {
-        items.quantity = Number(items.quantity) + 1;
-        isAvail = true;
-      }
-    });
-    if (isAvail) {
-      setProduct(updatedProduct);
-    } else {
-      setProduct([...product, item]);
+  const fetchData = async () => {
+    try {
+      let res = await axios.get("http://localhost:5000/cart/getProduct", {
+        headers: { Authorization: token },
+      });
+      setProduct(res.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-    // const filteredProduct = updatedProduct.filter(
-    //   (items) => items.quantity > 0
-    // );
-    // console.log(filteredProduct, "filter prod is");
-    // setProduct(filteredProduct);
   };
-  const addQuantity = () => {
+  useEffect(() => {
+    fetchData(); // Call the fetchData function to initiate the asynchronous operation
+  }, []);
+  const addItemtoCart = async (item) => {
+    try {
+      let res = await axios.get("http://localhost:5000/cart/getProduct", {
+        headers: { Authorization: token },
+      });
+      product = res.data;
+      let isAvail = false;
+      let updatedProduct = [...product];
+
+      console.log("response is ", res.data);
+
+      updatedProduct.forEach(async (items) => {
+        if (items.title === item.title) {
+          items.quantity = Number(items.quantity) + 1;
+          isAvail = true;
+          return await axios.patch(
+            "http://localhost:5000/cart/updateQuantity",
+            { quantity: items.quantity, title: items.title },
+            {
+              headers: { Authorization: token },
+            }
+          );
+        }
+      });
+      if (isAvail) {
+        setProduct(updatedProduct);
+      } else {
+        await axios.post("http://localhost:5000/cart/saveProduct", item, {
+          headers: { Authorization: token },
+        });
+        setProduct([...product, item]);
+      }
+      // const filteredProduct = updatedProduct.filter(
+      //   (items) => items.quantity > 0
+      // );
+      // console.log(filteredProduct, "filter prod is");
+      // setProduct(filteredProduct);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const addQuantity = async (title) => {
     quantity = quantity + 1;
+    console.log(token, "token is");
+    await axios.patch(
+      "http://localhost:5000/cart/updateQuantity",
+      { quantity: quantity, title: title },
+      {
+        headers: { Authorization: token },
+      }
+    );
     setQuantity(quantity);
   };
   const subQuantity = (item) => {
     quantity = quantity - 1;
     setQuantity(quantity);
-    console.log(item);
+    console.log(item, "at sub");
+
     let isAvail = false;
     let updatedProduct = [...product];
-    updatedProduct.forEach((items) => {
+    console.log("at sub", updatedProduct);
+    updatedProduct.forEach(async (items) => {
       if (items.title === item.title) {
         items.quantity = Number(items.quantity) - 1;
         isAvail = true;
+        if (items.quantity < 1) {
+          removeItemfromCart(items.id);
+        } else {
+          await axios.patch(
+            "http://localhost:5000/cart/updateQuantity",
+            { quantity: items.quantity, title: items.title },
+            {
+              headers: { Authorization: token },
+            }
+          );
+        }
       }
     });
     if (isAvail) {
@@ -46,17 +102,25 @@ const ProductProvider = (props) => {
     } else {
       setProduct([...product, item]);
     }
-    // checkQuantity()
+    // checkQuantity();
   };
-  const removeItemfromCart = (name) => {
-    const updatedProduct = product.filter((item) => item.title !== name);
-    let quantity = 0;
-    updatedProduct.forEach((item) => {
-      quantity = quantity + Number(item.quantity);
-    });
-
-    setProduct(updatedProduct);
-    setQuantity(quantity);
+  const removeItemfromCart = async (id) => {
+    try {
+      const updatedProduct = product.filter((item) => item.id !== id);
+      let quantity = 0;
+      // updatedProduct.forEach((item) => {
+      //   quantity = quantity + Number(item.quantity);
+      // });
+      console.log(token);
+      await axios.delete(`http://localhost:5000/cart/deleteProduct/${id}`, {
+        headers: { Authorization: token },
+      });
+      console.log(updatedProduct, "AFTER DFELE");
+      setProduct(updatedProduct);
+      setQuantity(quantity);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const totatAmount = () => {};
   // const checkQuantity = (product) => {

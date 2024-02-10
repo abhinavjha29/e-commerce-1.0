@@ -6,7 +6,7 @@ import ProductContext from "../../Store/ProductContext";
 import styles from "./SingleCartitems.module.css";
 // import classes from "./Singlecartitems.module.css";
 
-const SingleCartItem = ({ imageUrl, title, price, quantity }) => {
+const SingleCartItem = ({ imageUrl, title, price, quantity, id }) => {
   // const productContext = useContext(ProductContext);
   // const addQuantity = productContext.addQuantity;
   // const addItem = productContext.addItem;
@@ -22,14 +22,14 @@ const SingleCartItem = ({ imageUrl, title, price, quantity }) => {
   const handleaddbtn = (e) => {
     e.preventDefault();
     console.log("add btn");
-    addQuantity();
-    const item = { imageUrl, title, price, quantity };
+    addQuantity(title);
+    const item = { imageUrl, title, price, quantity, id };
     addItem(item);
   };
   const handleRemovebtn = (e) => {
     e.preventDefault();
 
-    removeItem(title);
+    removeItem(id);
   };
   const handleMinusbtn = (e) => {
     e.preventDefault();

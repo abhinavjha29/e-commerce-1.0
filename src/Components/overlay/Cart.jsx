@@ -65,6 +65,7 @@ const Cart = ({ setSelectedTab }) => {
             price={item.price}
             imageUrl={item.image}
             quantity={item.quantity}
+            id={item.id}
           ></SingleCartItem>
         ))}
         <div class="card">
